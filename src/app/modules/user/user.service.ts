@@ -1,16 +1,32 @@
-import { Iuser } from "./user.interface";
+import AppError from "../../errorHelpers/AppError";
+import { Iuser, IAuthProvider } from "./user.interface";
 import { User } from "./user.model";
+import httpStatus from "http-status-codes";
+import bcryptjs from "bcryptjs";
 
 const createUser = async (payload: Partial<Iuser>) => {
-  const { name, email } = payload;
+  const { email, password, ...rest } = payload;
 
-  if (!name || !email) {
-    throw new Error("Name and email are required");
+  const isUserExist = await User.findOne({ email });
+  if (isUserExist) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "User already exists with this email",
+    );
   }
 
+  const hashedPassword = await bcryptjs.hash(password as string, 10);
+
+  const authProvider: IAuthProvider = {
+    provider: "credentials",
+    providerId: email,
+  };
+
   const user = await User.create({
-    name,
     email,
+    password: hashedPassword,
+    auths: [authProvider],
+    ...rest,
   });
 
   return user;
