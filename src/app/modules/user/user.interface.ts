@@ -27,7 +27,7 @@ export interface Iuser {
   address?: string;
   isdeleted?: string;
   isActive?: isActive;
-  isVerified?: string;
+  isVerified?: boolean;
   role: Role;
   auths: IAuthProvider[];
   bookings?: Types.ObjectId[];
