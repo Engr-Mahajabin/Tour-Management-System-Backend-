@@ -25,6 +25,7 @@ export const checkAuth =
           "You don't have permission to access this resource",
         );
       }
+      req.user = verifiedToken;
       next();
     } catch (error) {
       next(error);
