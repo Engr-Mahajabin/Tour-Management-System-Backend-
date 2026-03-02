@@ -1,5 +1,5 @@
 import z from "zod";
-import { isActive, Role } from "./user.interface";
+import { IsActive, Role } from "./user.interface";
 
 //User Registration validation middleware:
 export const createUserZodSchema = z.object({
@@ -85,7 +85,7 @@ export const updateUserZodSchema = z.object({
 
   role: z.enum(Object.values(Role) as [string]).optional(),
 
-  isActive: z.enum(Object.values(isActive) as [string]).optional(),
+  isActive: z.enum(Object.values(IsActive) as [string]).optional(),
 
   isDeleted: z
     .boolean({ invalid_type_error: "isDeleted must be true or false" })
